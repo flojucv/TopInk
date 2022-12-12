@@ -69,7 +69,8 @@ public class details extends JDialog {
 				break;
 			default : 
 				break;
-		}
+		}//test
+		
 		
 		
 		
