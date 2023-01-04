@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import c.connecteur;
 import m.imprimante;
 import m.utilisateur;
 
@@ -15,16 +16,18 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
 
 public class modif_utilisateur extends JDialog {
 
 	private JPanel contentPane;
 	private JTextField nom_txt;
 	private JTextField prenom_txt;
-	private JTextField section_txt;
 
 	/**
 	 * Launch the application.
@@ -46,6 +49,9 @@ public class modif_utilisateur extends JDialog {
 	 * Create the frame.
 	 */
 	public modif_utilisateur(String InfoUser) {
+		ImageIcon img = new ImageIcon("img/logo.png");
+		setIconImage(img.getImage());
+		setTitle("Top ink | Modifier utilisateur");
 		String[] SplitInfo = InfoUser.split(" ");
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -71,7 +77,6 @@ public class modif_utilisateur extends JDialog {
 		
 		nom_txt = new JTextField();
 		nom_txt.setText(SplitInfo[0]);
-		nom_txt.setEditable(false);
 		nom_txt.setColumns(10);
 		nom_txt.setBounds(25, 74, 96, 19);
 		contentPane.add(nom_txt);
@@ -84,7 +89,6 @@ public class modif_utilisateur extends JDialog {
 		
 		prenom_txt = new JTextField();
 		prenom_txt.setText(SplitInfo[1]);
-		prenom_txt.setEditable(false);
 		prenom_txt.setColumns(10);
 		prenom_txt.setBounds(193, 74, 96, 19);
 		contentPane.add(prenom_txt);
@@ -95,28 +99,36 @@ public class modif_utilisateur extends JDialog {
 		section_lbl.setBounds(370, 51, 96, 13);
 		contentPane.add(section_lbl);
 		
-		section_txt = new JTextField();
-		section_txt.setText(SplitInfo[2].substring(1, SplitInfo[2].length()-1));
-		section_txt.setEditable(false);
-		section_txt.setColumns(10);
-		section_txt.setBounds(370, 74, 96, 19);
-		contentPane.add(section_txt);
+		String sql = "SELECT nom_section FROM section";
+		connecteur bdd = new connecteur();
+		List<String> reponse = bdd.select(sql, 1);
+		String[] arr = reponse.toArray(new String[0]);
+		String[] Choice = new String[arr.length];
+		for (int i = 0; i < arr.length; i++) {
+			Choice[i] = arr[i].substring(0, arr[i].length()-1);
+		}
+		
+		JComboBox<String> comboBox = new JComboBox<>(Choice);
+		comboBox.setBounds(380, 73, 86, 21);
+		contentPane.add(comboBox);
 		
 		JButton modif_btn = new JButton("Modifier");
 		modif_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(nom_txt.getText().length() == 0 || prenom_txt.getText().length() == 0 || section_txt.getText().length() == 0 ) {
+				if(nom_txt.getText().length() == 0 || prenom_txt.getText().length() == 0 ) {
 					JFrame frame = new JFrame("JOptionPane showInputDialog Alert");                     
 					JOptionPane.showMessageDialog(frame,"⚠, Une des case n'ai pas remplis.");
 				} else {
-					utilisateur.modifier_utilisateur(nom_txt.getText(), prenom_txt.getText(), section_txt.getText());
+					utilisateur.modifier_utilisateur(nom_txt.getText(), prenom_txt.getText(), comboBox.getItemAt(comboBox.getSelectedIndex()), SplitInfo[0], SplitInfo[1]);
 					JFrame frame = new JFrame("JOptionPane showInputDialog Alert");                     
-					JOptionPane.showMessageDialog(frame,"Sucess, Imprimante modifier");
+					JOptionPane.showMessageDialog(frame,"Sucess, Utilisateur modifier");
 					dispose();
 				}
 			}
 		});
 		modif_btn.setBounds(193, 122, 96, 21);
 		contentPane.add(modif_btn);
+		
+		
 	}
 }

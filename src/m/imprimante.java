@@ -6,7 +6,17 @@ import java.util.List;
 import c.connecteur;
 
 public class imprimante {
-
+	
+	/**
+	 * 
+	 * Permet de rendre visible ou d'ajouter une impirmante.
+	 * 
+	 * @param prm_reference La référence de l'imprimante.
+	 * @param prm_modele	Le modéle de l'imprimante.
+	 * @param prm_marque	La marque de l'imprimante.
+	 * @param Batiment		Le batiment dans lequel l'imprimante se situe.
+	 * @param salle			La salle dans laquel l'imprimante se situe.
+	 */
 	public static void ajout_impri(String prm_reference, String prm_modele, String prm_marque, String Batiment, String salle) {
 	    connecteur bdd = new connecteur();
 	    String sql = "SELECT * FROM modele_imprimante WHERE reference_impri = \"" + prm_reference.toLowerCase() + "\"";
@@ -23,6 +33,11 @@ public class imprimante {
 	    
 	}
 	
+	/**
+	 * Permet d'afficher tout les imprimantes visibles
+	 * 
+	 * @return <code>List</code> Renvoie tout les imprimantes qui sont visibles.
+	 */
 	public static List<String> afficher_imprimante() {
 		connecteur bdd = new connecteur();
 		String sql = "SELECT * FROM modele_imprimante WHERE visible = 1";
@@ -41,6 +56,11 @@ public class imprimante {
 		return ListFinal;
 	}
 	
+	/**
+	 * Permet de supprimer ou de cacher une imprimante de la liste.
+	 * 
+	 * @param ref_impri	La référence de l'imprimante.
+	 */
 	public static void supprimer_impri(String ref_impri) {
 		connecteur bdd = new connecteur();
 		String sql = "SELECT id_historique FROM historique WHERE reference_impri = " + ref_impri.toLowerCase();
@@ -55,6 +75,16 @@ public class imprimante {
 		bdd.requeteSansReponse(sql);
 	}
 	
+	/**
+	 * 
+	 * Permet de modifier l'imprimante.
+	 * 
+	 * @param prm_reference	La référence de l'imprimante.
+	 * @param prm_modele	Le modéle de l'imprimante.
+	 * @param prm_marque	La marque de l'imprimante.
+	 * @param Batiment		Le batiment dans lequel se trouve l'imprimante.
+	 * @param salle			La salle dans laquel se trouve l'imprimante.
+	 */
 	public static void modifier_imprimante(String prm_reference, String prm_modele, String prm_marque, String Batiment, String salle) {
 		connecteur bdd = new connecteur();
 		String modeleSansEspace = prm_modele.replace(" ", "_");

@@ -3,6 +3,7 @@ package v;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -41,6 +42,9 @@ public class modif_salle extends JDialog {
 	 * Create the dialog.
 	 */
 	public modif_salle(String InfoSalle) {
+		ImageIcon img = new ImageIcon("img/logo.png");
+		setIconImage(img.getImage());
+		setTitle("Top ink | Modifier salle");
 		getContentPane().setBackground(new Color(34, 58, 89));
 		setResizable(false);
 		String[] SplitInfo = InfoSalle.split(" ");
@@ -49,7 +53,6 @@ public class modif_salle extends JDialog {
 		
 		batiment_txt = new JTextField();
 		batiment_txt.setText(SplitInfo[0]);
-		batiment_txt.setEditable(false);
 		batiment_txt.setColumns(10);
 		batiment_txt.setBounds(32, 56, 96, 19);
 		getContentPane().add(batiment_txt);
@@ -68,7 +71,6 @@ public class modif_salle extends JDialog {
 		
 		numSalle_txt = new JTextField();
 		numSalle_txt.setText(SplitInfo[1]);
-		numSalle_txt.setEditable(false);
 		numSalle_txt.setColumns(10);
 		numSalle_txt.setBounds(185, 56, 96, 19);
 		getContentPane().add(numSalle_txt);

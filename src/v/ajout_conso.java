@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import javax.swing.JTextField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -48,6 +49,9 @@ public class ajout_conso extends JDialog {
 	 * Create the frame.
 	 */
 	public ajout_conso() {
+		ImageIcon img = new ImageIcon("img/logo.png");
+		setIconImage(img.getImage());
+		setTitle("Top ink | Ajouter consommable");
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 350, 430);

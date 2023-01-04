@@ -9,11 +9,13 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.border.LineBorder;
 import javax.swing.table.TableColumn;
 
+import c.connecteur;
 import m.consommables;
 
 import java.awt.Color;
@@ -26,23 +28,18 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.JComboBox;
 
-public class top_ink extends JDialog {
+public class top_ink extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField batiment_txt;
-	private JTextField ref_txt;
 	private JTextField date_txt;
-	private JTextField numSalle_txt;
-	private JTextField prenom_txt;
-	private JTextField nom_txt;
 	private JTextField qte_txt;
-	private JTable table;
-
 	/**
 	 * Launch the application.
 	 */
@@ -62,9 +59,39 @@ public class top_ink extends JDialog {
 	/**
 	 * Create the frame.
 	 */
+	public String[] affichageJComboBox(String sql) {
+		;
+		connecteur bdd = new connecteur();
+		List<String> reponse = bdd.select(sql, 1);
+		String[] arr = reponse.toArray(new String[0]);
+		String[] Choice = new String[arr.length];
+		for (int i = 0; i < arr.length; i++) {
+			
+			Choice[i] = arr[i].substring(0, arr[i].length()-1);
+		}	
+		
+		return Choice;
+	}
+	
+	public String[] affichageJComboBoxL2(String sql) {
+		;
+		connecteur bdd = new connecteur();
+		List<String> reponse = bdd.select(sql, 2);
+		String[] arr = reponse.toArray(new String[0]);
+		String[] Choice = new String[arr.length];
+		for (int i = 0; i < arr.length; i++) {
+			String[] splitTemp = arr[i].split(";");
+			Choice[i] = splitTemp[0].toUpperCase() + " " + splitTemp[1].toUpperCase();
+		}	
+		
+		return Choice;
+	}
 	public top_ink() {
+		ImageIcon img = new ImageIcon("img/logo.png");
+		setIconImage(img.getImage());
+		setTitle("Top ink");
 		setResizable(false);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1000, 600);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(34, 58, 89));
@@ -87,23 +114,12 @@ public class top_ink extends JDialog {
 		ref_lbl.setBounds(60, 50, 100, 30);
 		contentPane.add(ref_lbl);
 		
-		ref_txt = new JTextField();
-		ref_txt.setToolTipText("");
-		ref_txt.setBounds(170, 55, 150, 21);
-		contentPane.add(ref_txt);
-		ref_txt.setColumns(10);
-		
-		JLabel batiment_lbl = new JLabel("Batiment :");
+		JLabel batiment_lbl = new JLabel("Salle:");
 		batiment_lbl.setForeground(new Color(255, 255, 255));
 		batiment_lbl.setHorizontalAlignment(SwingConstants.TRAILING);
 		batiment_lbl.setFont(new Font("Tahoma", Font.BOLD, 15));
-		batiment_lbl.setBounds(0, 93, 160, 30);
+		batiment_lbl.setBounds(180, 93, 160, 30);
 		contentPane.add(batiment_lbl);
-		
-		batiment_txt = new JTextField();
-		batiment_txt.setBounds(170, 100, 150, 21);
-		contentPane.add(batiment_txt);
-		batiment_txt.setColumns(10);
 		
 		JLabel date_lbl = new JLabel("Date :");
 		date_lbl.setForeground(new Color(255, 255, 255));
@@ -121,41 +137,12 @@ public class top_ink extends JDialog {
 		contentPane.add(date_txt);
 		date_txt.setColumns(10);
 		
-		JLabel numSalle_lbl = new JLabel("Numero  salle :");
-		numSalle_lbl.setForeground(new Color(255, 255, 255));
-		numSalle_lbl.setHorizontalAlignment(SwingConstants.TRAILING);
-		numSalle_lbl.setFont(new Font("Tahoma", Font.BOLD, 15));
-		numSalle_lbl.setBounds(339, 98, 121, 25);
-		contentPane.add(numSalle_lbl);
-		
-		numSalle_txt = new JTextField();
-		numSalle_txt.setBounds(470, 100, 150, 21);
-		contentPane.add(numSalle_txt);
-		numSalle_txt.setColumns(10);
-		
-		JLabel nom_lbl = new JLabel("Nom :");
+		JLabel nom_lbl = new JLabel("Utilisateur :");
 		nom_lbl.setForeground(new Color(255, 255, 255));
 		nom_lbl.setHorizontalAlignment(SwingConstants.TRAILING);
 		nom_lbl.setFont(new Font("Tahoma", Font.BOLD, 15));
-		nom_lbl.setBounds(715, 53, 75, 25);
+		nom_lbl.setBounds(646, 53, 144, 25);
 		contentPane.add(nom_lbl);
-		
-		nom_txt = new JTextField();
-		nom_txt.setColumns(10);
-		nom_txt.setBounds(800, 55, 150, 21);
-		contentPane.add(nom_txt);
-		
-		JLabel prenom_lbl = new JLabel("Prénom :");
-		prenom_lbl.setForeground(new Color(255, 255, 255));
-		prenom_lbl.setHorizontalAlignment(SwingConstants.TRAILING);
-		prenom_lbl.setFont(new Font("Tahoma", Font.BOLD, 15));
-		prenom_lbl.setBounds(715, 96, 75, 25);
-		contentPane.add(prenom_lbl);
-		
-		prenom_txt = new JTextField();
-		prenom_txt.setColumns(10);
-		prenom_txt.setBounds(800, 100, 150, 21);
-		contentPane.add(prenom_txt);
 			
 		
 		JSeparator separator = new JSeparator();
@@ -201,13 +188,29 @@ public class top_ink extends JDialog {
 		qte_lbl.setForeground(new Color(255, 255, 255));
 		qte_lbl.setHorizontalAlignment(SwingConstants.TRAILING);
 		qte_lbl.setFont(new Font("Tahoma", Font.BOLD, 15));
-		qte_lbl.setBounds(339, 145, 121, 25);
+		qte_lbl.setBounds(532, 96, 121, 25);
 		contentPane.add(qte_lbl);
 		
 		qte_txt = new JTextField();
 		qte_txt.setColumns(10);
-		qte_txt.setBounds(470, 147, 150, 21);
+		qte_txt.setBounds(663, 100, 150, 21);
 		contentPane.add(qte_txt);
+		
+		
+		String[] Choice = affichageJComboBox("SELECT reference_conso FROM consommable WHERE stock > 0");
+		String[] Choice1 = affichageJComboBoxL2("SELECT batiment, designation FROM salle WHERE visible = 1");
+		String[] Choice2 = affichageJComboBoxL2("SELECT nom, prenom FROM utilisateur WHERE visible = 1");
+		JComboBox<String> comboBox_salle = new JComboBox<>(Choice1);
+		comboBox_salle.setBounds(350, 100, 150, 21);
+		contentPane.add(comboBox_salle);
+		
+		JComboBox<String> comboBox_ref = new JComboBox<>(Choice);
+		comboBox_ref.setBounds(170, 57, 150, 21);
+		contentPane.add(comboBox_ref);
+		
+		JComboBox<String> comboBox_utilisateur = new JComboBox<>(Choice2);
+		comboBox_utilisateur.setBounds(800, 57, 150, 21);
+		contentPane.add(comboBox_utilisateur);
 		
 		JButton add_btn = new JButton("Ajouter Consommable");
 		add_btn.addActionListener(new ActionListener() {
@@ -224,7 +227,9 @@ public class top_ink extends JDialog {
 		supp_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					int retirer_conso = consommables.retire_conso(ref_txt.getText(), date_txt.getText(), batiment_txt.getText(), numSalle_txt.getText(), nom_txt.getText(), prenom_txt.getText(), Integer.parseInt(qte_txt.getText()));
+					String[] splitSalle = comboBox_salle.getItemAt(comboBox_salle.getSelectedIndex()).split(" ");
+					String[] splitUtilisateur = comboBox_utilisateur.getItemAt(comboBox_utilisateur.getSelectedIndex()).split(" ");
+					int retirer_conso = consommables.retire_conso(comboBox_ref.getItemAt(comboBox_ref.getSelectedIndex()), date_txt.getText(), splitSalle[0], splitSalle[1], splitUtilisateur[0], splitUtilisateur[1], Integer.parseInt(qte_txt.getText()));
 					switch(retirer_conso) {
 						case 1:
 							JFrame frame = new JFrame("JOptionPane showMessageDialog error");                     
@@ -301,6 +306,8 @@ public class top_ink extends JDialog {
 		});
 		actualiser_btn.setBounds(818, 266, 110, 21);
 		contentPane.add(actualiser_btn);
+		
+		
 		
 		
 	}

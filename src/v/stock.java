@@ -3,6 +3,7 @@ package v;
 import java.awt.EventQueue;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -44,6 +45,9 @@ public class stock extends JDialog {
 	 * @param type 
 	 */
 	public stock(String type) {
+		ImageIcon img = new ImageIcon("img/logo.png");
+		setIconImage(img.getImage());
+		setTitle("Top ink | Stock");
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 300, 575);

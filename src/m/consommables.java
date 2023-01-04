@@ -116,6 +116,10 @@ public class consommables {
 		}		
 	}
 	
+	/**
+	 * 
+	 * @return <code>List</code> Renvoie la liste des types de consommable avec combien de consommable contient chaque type.
+	 */
 	public static List<String> afficher_conso() {
 		connecteur bdd = new connecteur();
 		String sql = "SELECT modele.modele, SUM(stock) FROM consommable INNER JOIN modele ON consommable.modele = modele.id_modele GROUP BY consommable.modele";
@@ -129,6 +133,11 @@ public class consommables {
 		return finalList;
 	}
 	
+	/**
+	 * 
+	 * @param type Le type de consommable.
+	 * @return <code>List</code> Renvoie tout le stock d'un type de consommable
+	 */
 	public static List<String> all_conso_type(String type) {
 		connecteur bdd = new connecteur();
 		String sql = "SELECT consommable.reference_conso, consommable.stock FROM consommable INNER JOIN modele ON modele.id_modele = consommable.modele WHERE modele.modele =  \"" + type + "\"";

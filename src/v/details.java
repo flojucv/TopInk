@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -36,7 +37,7 @@ public class details extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			details dialog = new details("utilisateur");
+			details dialog = new details("imprimante");
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -48,9 +49,11 @@ public class details extends JDialog {
 	 * Create the dialog.
 	 */
 	public details(String mode) {
+		ImageIcon img = new ImageIcon("img/logo.png");
+		setIconImage(img.getImage());
 		setResizable(false);
 		getContentPane().setBackground(new Color(34, 58, 89));
-		setTitle("DETAIL " + mode.toUpperCase());
+		setTitle("Top ink | DETAIL " + mode.toUpperCase());
 		setBounds(100, 100, 463, 330);
 		getContentPane().setLayout(null);
 		DefaultListModel<String> l1 = new DefaultListModel<>();
@@ -96,22 +99,21 @@ public class details extends JDialog {
 						break;
 					case "utilisateur" :
 						String[] splitLigne1 = l1.elementAt(index).split(" ");
-						System.out.println(splitLigne1[0] + splitLigne1[1]);
 						utilisateur.supprimer_utilisateur(splitLigne1[0], splitLigne1[1]);
 						l1.removeAllElements();
 						l1.addAll(utilisateur.afficher_utilisateur());
 						JFrame frame1 = new JFrame("JOptionPane showInputDialog Alert");                     
 						JOptionPane.showMessageDialog(frame1,"Sucess, L'utilisateur a été supprimer.");
+						break;
 					case "salle":
 						String[] splitLigne2 = l1.elementAt(index).split(" ");
-						System.out.println(splitLigne2[0] + splitLigne2[1]);
 						salle.supprimer_salle(splitLigne2[0], splitLigne2[1]);
 						l1.removeAllElements();
-						l1.addAll(utilisateur.afficher_utilisateur());
+						l1.addAll(salle.afficher_salle());
 						JFrame frame2 = new JFrame("JOptionPane showInputDialog Alert");                     
 						JOptionPane.showMessageDialog(frame2,"Sucess, L'utilisateur a été supprimer.");
+						break;
 					default:
-						
 						break;
 				}
 				
@@ -171,6 +173,9 @@ public class details extends JDialog {
 						break;
 					case "utilisateur":
 						l1.addAll(utilisateur.afficher_utilisateur());
+						break;
+					case "salle":
+						l1.addAll(salle.afficher_salle());
 						break;
 					default :
 						break;

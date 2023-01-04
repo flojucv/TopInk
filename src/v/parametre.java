@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
 import java.awt.Color;
@@ -70,8 +71,10 @@ public class parametre extends JDialog {
 	 * Create the frame.
 	 */
 	public parametre() {
+		ImageIcon img = new ImageIcon("img/logo.png");
+		setIconImage(img.getImage());
+		setTitle("Top ink | Parametre");
 		setResizable(false);
-		setTitle("PARAMETRE");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1000, 900);
 		contentPane = new JPanel();

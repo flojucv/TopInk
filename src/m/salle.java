@@ -6,12 +6,14 @@ import java.util.List;
 import c.connecteur;
 
 public class salle {
-
-	public static void main(String[] args) {
-		modif_salle("B", "01", "D", "111");
-
-	}
 	
+	/**
+	 * 
+	 * Permet d'ajouter une salle dans la bdd.
+	 * 
+	 * @param Batiment	Le batiment de la salle.
+	 * @param numSalle	Le numéro de la salle.
+	 */
 	public static void ajout_salle(String Batiment, String numSalle) {
 	    connecteur bdd = new connecteur();
 	    String sql = "SELECT * FROM salle WHERE batiment = \"" + Batiment.toUpperCase() + "\" AND designation = \"" + numSalle.toUpperCase() + "\"";
@@ -24,6 +26,12 @@ public class salle {
 	    
 	}
 	
+	/**
+	 * 
+	 * Permet d'afficher les salles visibles
+	 * 
+	 * @return <code>List</code> Renvoie une liste contenant les salles visibles
+	 */
 	public static List<String> afficher_salle() {
 		connecteur bdd = new connecteur();
 		String sql = "SELECT * FROM salle WHERE visible = 1";
@@ -38,20 +46,31 @@ public class salle {
 		return ListFinal;
 	}
 	
+	/**
+	 * 
+	 * Permet de supprimer ou de cacher une salle.
+	 * 
+	 * @param batiment	Le batiment de la salle.
+	 * @param numSalle	Le numéro de la salle.
+	 */
 	public static void supprimer_salle(String batiment, String numSalle) {
 		connecteur bdd = new connecteur();
-		String sql = "SELECT id_historique FROM historique WHERE id_salle = (SELECT id_salle FROM salle WHERE batiment = \"" + batiment.toUpperCase() + "\" AND designation = \"" + numSalle.toUpperCase() + "\")" ;
-		
-		List<String> reponse = bdd.select(sql, 1);
-		
-		if(reponse.size() == 0) {
-			sql = "DELETE FROM salle WHERE batiment = \"" + batiment.toUpperCase() + "\" AND designation = \"" + numSalle.toUpperCase() + "\"";
-		} else {
-			sql = "UPDATE salle SET visible = false  WHERE batiment = \"" + batiment.toUpperCase() + "\" AND designation = \"" + numSalle.toUpperCase() + "\"";
-		}
+
+		String sql = "UPDATE salle SET visible = false  WHERE batiment = \"" + batiment.toUpperCase() + "\" AND designation = \"" + numSalle.toUpperCase() + "\"";
+		System.out.println(sql);
 		bdd.requeteSansReponse(sql);
 	}
 	
+	
+	/**
+	 * 
+	 * Permet de modifier une salle.
+	 * 
+	 * @param newBatiment	Le nouveau batiment dans lequel se trouve la salle.
+	 * @param newNumSalle	Le nouveau numéro dans lequel se trouve la salle.
+	 * @param oldBatiment	L'ancien batiment.
+	 * @param oldNumSalle	L'ancien numére de la salle.
+	 */
 	public static void modif_salle(String newBatiment, String newNumSalle, String oldBatiment, String oldNumSalle) {
 		connecteur bdd = new connecteur();
 		

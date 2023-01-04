@@ -3,12 +3,14 @@ package v;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import c.connecteur;
 import m.imprimante;
 
 import javax.swing.JTextField;
@@ -17,7 +19,9 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
 
 public class modif_impri extends JDialog {
 
@@ -25,8 +29,6 @@ public class modif_impri extends JDialog {
 	private JTextField reference_txt;
 	private JTextField modele_txt;
 	private JTextField marque_txt;
-	private JTextField batiment_txt;
-	private JTextField numSalle_txt;
 
 	/**
 	 * Launch the application.
@@ -44,12 +46,29 @@ public class modif_impri extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
+	
+	public String[] affichageJComboBoxL2(String sql) {
+		;
+		connecteur bdd = new connecteur();
+		List<String> reponse = bdd.select(sql, 2);
+		String[] arr = reponse.toArray(new String[0]);
+		String[] Choice = new String[arr.length];
+		for (int i = 0; i < arr.length; i++) {
+			String[] splitTemp = arr[i].split(";");
+			Choice[i] = splitTemp[0].toUpperCase() + " " + splitTemp[1].toUpperCase();
+		}	
+		
+		return Choice;
+	}
 	public modif_impri(String infoImpri) {
+		ImageIcon img = new ImageIcon("img/logo.png");
+		setIconImage(img.getImage());
+		setTitle("Top ink | Modifier Imprimante");
 		setResizable(false);
 		String[] SplitInfo = infoImpri.split(" ");
 		setBackground(new Color(34, 58, 89));
 		setForeground(new Color(34, 58, 89));
-		setBounds(100, 100, 485, 235);
+		setBounds(100, 100, 485, 190);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(new Color(34, 58, 89));
 		contentPanel.setForeground(new Color(34, 58, 89));
@@ -76,18 +95,6 @@ public class modif_impri extends JDialog {
 		marque_txt.setBounds(330, 70, 96, 19);
 		contentPanel.add(marque_txt);
 		
-		batiment_txt = new JTextField();
-		batiment_txt.setText(SplitInfo[3].substring(1, 2));
-		batiment_txt.setColumns(10);
-		batiment_txt.setBounds(115, 137, 96, 19);
-		contentPanel.add(batiment_txt);
-		
-		numSalle_txt = new JTextField();
-		numSalle_txt.setText(SplitInfo[3].substring(2, SplitInfo[3].length()-1));
-		numSalle_txt.setColumns(10);
-		numSalle_txt.setBounds(264, 137, 96, 19);
-		contentPanel.add(numSalle_txt);
-		
 		JLabel ref_lbl = new JLabel("Reference:");
 		ref_lbl.setForeground(new Color(255, 255, 255));
 		ref_lbl.setHorizontalAlignment(SwingConstants.CENTER);
@@ -109,14 +116,8 @@ public class modif_impri extends JDialog {
 		JLabel batiment_lbl = new JLabel("Batiment:");
 		batiment_lbl.setForeground(new Color(255, 255, 255));
 		batiment_lbl.setHorizontalAlignment(SwingConstants.CENTER);
-		batiment_lbl.setBounds(115, 114, 96, 13);
+		batiment_lbl.setBounds(117, 99, 96, 13);
 		contentPanel.add(batiment_lbl);
-		
-		JLabel numSalle_lbl = new JLabel("Numéro salle:");
-		numSalle_lbl.setForeground(new Color(255, 255, 255));
-		numSalle_lbl.setHorizontalAlignment(SwingConstants.CENTER);
-		numSalle_lbl.setBounds(264, 114, 96, 13);
-		contentPanel.add(numSalle_lbl);
 		
 		JLabel Modif_lbl = new JLabel("MODIFIER IMPRIMANTE");
 		Modif_lbl.setForeground(new Color(255, 255, 255));
@@ -124,21 +125,29 @@ public class modif_impri extends JDialog {
 		Modif_lbl.setBounds(0, 10, 471, 13);
 		contentPanel.add(Modif_lbl);
 		
+		String[] Choice = affichageJComboBoxL2("SELECT batiment, designation FROM salle WHERE visible = 1");
+		JComboBox<String> comboBox = new JComboBox<>(Choice);
+		comboBox.setBounds(195, 95, 96, 21);
+		contentPanel.add(comboBox);
+		
 		JButton modif_btn = new JButton("Modifier");
 		modif_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(reference_txt.getText().length() == 0 || modele_txt.getText().length() == 0 || marque_txt.getText().length() == 0 || batiment_txt.getText().length() == 0 || numSalle_txt.getText().length() == 0) {
+				String[] splitSalle = comboBox.getItemAt(comboBox.getSelectedIndex()).split(" ");
+				if(reference_txt.getText().length() == 0 || modele_txt.getText().length() == 0 || marque_txt.getText().length() == 0) {
 					JFrame frame = new JFrame("JOptionPane showInputDialog Alert");                     
 					JOptionPane.showMessageDialog(frame,"⚠, Une des case n'ai pas remplis.");
 				} else {
-					imprimante.modifier_imprimante(reference_txt.getText(), modele_txt.getText(), marque_txt.getText(), batiment_txt.getText(), numSalle_txt.getText());
+					imprimante.modifier_imprimante(reference_txt.getText(), modele_txt.getText(), marque_txt.getText(), splitSalle[0], splitSalle[1]);
 					JFrame frame = new JFrame("JOptionPane showInputDialog Alert");                     
 					JOptionPane.showMessageDialog(frame,"Sucess, Imprimante modifier");
 					dispose();
 				}
 			}
 		});
-		modif_btn.setBounds(198, 166, 85, 21);
+		modif_btn.setBounds(196, 123, 85, 21);
 		contentPanel.add(modif_btn);
+		
+		
 	}
 }
